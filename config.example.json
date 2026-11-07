@@ -1,0 +1,7 @@
+{
+  "codex_model": "",
+  "comfy_url": "http://127.0.0.1:8188",
+  "ffmpeg_path": "ffmpeg",
+  "comfy_path": "/path/to/ComfyUI",
+  "qwen_url": "http://127.0.0.1:8188"
+}
