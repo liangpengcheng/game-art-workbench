@@ -47,3 +47,5 @@ Windows NVIDIA 使用与你的显卡匹配的 CUDA 版 PyTorch；AMD AI Max 395 
 如 Codex CLI 默认模型与登录账号不兼容，在 config.json 中设置 codex_model 为该 CLI 和账号实际支持的模型；留空则使用 Codex 默认配置。优化失败时可直接手动编辑描述。
 
 可选项 qwen_url 可以指定独立的原画 ComfyUI 服务；留空或与 comfy_url 相同时使用同一个服务。使用不同服务时，工作台会在切换生成任务前请求另一服务释放模型显存。两者必须使用同一台机器和同一个 ComfyUI 输入/输出目录。环境变量 GAME_ART_QWEN_URL 可覆盖该设置。
+
+安装前可运行 `python doctor.py` 检查本地依赖、服务和必需模型。此检查不会安装模型或驱动，也不能代替实际生成测试。要在 Codex 中启用仓库附带的 Skill，可将 `skills/game-art-workbench` 复制到 Codex 的用户 skills 目录；新会话会加载可发现的 Skill。

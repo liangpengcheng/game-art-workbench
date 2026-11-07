@@ -154,6 +154,8 @@ class Handler(BaseHTTPRequestHandler):
             if size>20_000_000: raise ValueError('文件过大')
             d=json.loads(self.rfile.read(size)); op=urlparse(self.path).path.removeprefix('/api/')
             if op=='upload':
+                with LOCK:
+                    if JOB['state']=='running': return self.respond(409,{'error':'任务正在运行，请等待完成后再更换图片'})
                 p=project(d['project']); kind=d.get('kind');
                 if kind not in ('first','last'): raise ValueError('无效图片类型')
                 raw=base64.b64decode(d['data'].split(',')[-1],validate=True)
@@ -163,7 +165,7 @@ class Handler(BaseHTTPRequestHandler):
             if op not in ('optimize','frames','video','candidates','export'): raise ValueError('未知操作')
             with LOCK:
                 if JOB['state']=='running': return self.respond(409,{'error':'已有任务正在运行'})
-                JOB.update(state='running',message='正在准备…',result={},error='')
+                JOB.update(state='running',message='正在准备…',result={},error='',operation=op,project=d.get('project'),job_id=uuid.uuid4().hex)
             threading.Thread(target=worker,args=(op,d),daemon=True).start(); return self.respond(202,{'ok':True})
         except Exception as e: return self.respond(400,{'error':str(e)})
 if __name__=='__main__':
